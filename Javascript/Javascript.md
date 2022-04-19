@@ -7,3 +7,18 @@ function handleTitleClick() {
 }
 ```
 ***
+
+# 2022-04-19
+## preventDefault()
+필요하다면 eventHandler에서 event를 받아 브라우저의 기본 동작을 막을 수 있다.  
+ex) form이 submit하면 브라우저가 자동으로 새로고침하는 것을 막는다.
+
+```javascript
+function eventHandler(event) {
+    event.preventDefault();
+}
+loginForm.addEventListener("submit", eveneHandler);
+```
+
+## alert
+alert() blocks javascript working. So usually don't use it.

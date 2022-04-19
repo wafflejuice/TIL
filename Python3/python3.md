@@ -55,3 +55,15 @@
     ```
 
 to copy a list recursively, use ```copy.deepcopy(...)``` method. (But you need to think about overhead.)
+
+# 2022-04-19
+## break nested loop
+```python
+for yi in range(9):
+    for xi in range(9):
+        if board[yi][xi] == '.':
+            break
+    else:  # only execute when it's no break in the inner loop
+        continue
+    break
+```
