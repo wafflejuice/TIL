@@ -109,7 +109,6 @@ current depth parameter를 사용해 종료 조건을 판별할 수 있다.
 Ex) LeetCode [37. Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)
 
 ```python
-# 'q' is a nested list
 dfs(depth, q)
     if depth == len(q):
         return True
