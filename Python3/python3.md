@@ -67,3 +67,66 @@ for yi in range(9):
         continue
     break
 ```
+
+# 2022-04-20
+## enumerate
+iterable의 index와 값을 둘다 얻고 싶을 때 나는 다음처럼 사용했다.
+```python
+min_idx=-1
+min_value=math.inf
+
+for i in range(len(my_list)):
+    if my_list[i] < min_value:
+        min_idx=i
+        min_value=my_list[i]
+```
+code가 짧을 땐 상관없지만, nested loop라도 사용하게 되면 점점 직관적으로 이해하기 힘들어진다. 이럴 때 enumerate를 사용하면 간편하다.
+```python
+min_idx=-1
+min_value=math.inf
+
+for i, val in enumerate(my_list):
+    if val < min_value:
+        min_idx=i
+        min_value=val
+```
+
+***
+
+## reduce
+```python
+from functools import reduce
+sets = [set1, set2, set3]
+intersection = reduce(set.intersection, sets)
+```
+
+## DFS
+조건
+- DFS의 종료 조건을 계산하는 cost가 크다.
+- DFS가 최대 몇 번 일어나는지 안다. (tree의 높이를 안다.)
+
+current depth parameter를 사용해 종료 조건을 판별할 수 있다.  
+Ex) LeetCode [37. Sudoku Solver](https://leetcode.com/problems/sudoku-solver/)
+
+```python
+# 'q' is a nested list
+dfs(depth, q)
+    if depth == len(q):
+        return True
+
+    for e in q:
+        ...
+        if dfs(depth+1, q):
+            return True
+```
+
+# 2022-04-21
+## iterates two iterables at once
+```python
+for i,j in zip(list1,list2):
+    ...
+```
+
+## set remove vs. discard
+my_set.remove(key) raises an error when there is no such key.  
+my_set.discard(key) doesn't raise an error.

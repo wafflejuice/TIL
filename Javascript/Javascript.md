@@ -22,3 +22,19 @@ loginForm.addEventListener("submit", eveneHandler);
 
 ## alert
 alert() blocks javascript working. So usually don't use it.
+
+# 2022-04-21
+## parentNode vs. parentElement
+Almost same.
+- If a node's parent is not an element, parentElement returns null.
+- For Internet Explorer, parentNode is defined for SVG elements, but parentElement is undefined.
+
+```javascript
+document.body.parentNode; // the <html> element
+document.body.parentElement; // the <html> element
+
+document.querySelector('html').parentNode; // the document node
+document.querySelector('html').parentElement; // null
+```
+
+일반적으로 둘중 무엇을 써도 상관없을 것이다.
