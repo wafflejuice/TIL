@@ -6,3 +6,6 @@
 
 # 2022-04-21
 `Ctrl`+`Click` : find the usage of the clicked method
+
+# 2022-04-22
+`Ctrl`+`Alt`+`N` : inline variable

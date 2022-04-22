@@ -37,4 +37,4 @@ document.querySelector('html').parentNode; // the document node
 document.querySelector('html').parentElement; // null
 ```
 
-일반적으로 둘중 무엇을 써도 상관없을 것이다.
+일반적으로 둘중 무엇을 써도 상관없다.
