@@ -9,3 +9,7 @@
 
 # 2022-04-22
 `Ctrl`+`Alt`+`N` : inline variable
+
+# 2022-04-23
+`Alt`+`F12` : switch to terminal window
+`Alt`+`4` : switch to run window

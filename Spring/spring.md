@@ -109,3 +109,31 @@ static class PrototypeBean {
     ...
 }
 ```
+ObjectProvider는 request scope bean을 다룰 때에도 유용하게 쓰인다. singleton scope bean **S**가 request scope bean **R**을 가질 때, S의 생성 및 DI 시점에는 HTTP request가 들어오지 않았다. 이후 HTTP request가 들어오면 `ObjectProvider.getObject()`를 호출하여 lazy하게 **R**을 생성하는 식이다.
+
+# 2022-04-23
+## Proxy
+request scope bean을 다룰 때(그리고 그외 필요할 상황에서) ObjectProvider보다 더 간편한 방법은 Proxy를 사용하는 것이다.
+```java
+@Component
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class MyLogger {
+    ...
+}
+
+@Controller
+@RequiredArgsConstructor
+public class LogDemoController {
+    private final MyLogger myLogger;
+    ...
+}
+```
+CGLIB이 내가 등록할 객체 **R**을 상속하는 proxy 객체 **P**를 생성하고, spring container에 **P**를 등록한다. **P**에는 요청이 오면 그때 **R**을 요청하는 위임 로직이 들어있다.  
+따라서 사용자 입장에서는 HTTP request가 들어올 때 **P**를 요청하면, 그때 **P**가 **R**을 요청하므로 원하는 결과를 얻게 된다. 마치 singleton bean처럼 사용할 수 있는 것이다.
+
+***
+
+## @RequestMapping, @GetMapping, @PostMapping
+@GetMapping, @PostMapping을 @RequestMapping의 shortcut으로 사용할 수 있다.  
+`@RequestMapping(value = "/...", method = RequestMethod.GET)` can be replaced by `@GetMapping("/...")`  
+`@RequestMapping(value = "/...", method = RequestMethod.POST)` can be replaced by `@PostMapping("/...")`  
