@@ -1,0 +1,22 @@
+- Digital Data &rarr; Digital Signals
+    - RZ (Return to Zero)
+    - NRZ (Non-Return to Zero)
+        - NRZ-L (NRZ Level)
+        - NRZ-I (NRZ Inverted)
+    - Multilevel Binary
+        - Bipolar-AMI (Alternate Mark Inversion)
+        - Pseudoternary
+    - Biphase
+        - Manchester
+        - Differential Manchester
+    - Scrambling Techniques
+        - B8ZS (Bipolar with 8-Zeros Subsitution)
+        - HDB3 (High Density Bipolar 3-zeros)
+
+- Digital Data &rarr; Analog Signals
+    - ASK (Amplitude Shift Keying)
+    - FSK (Frequency Shift Keying)
+    - PSK (Phase Shift Keying)
+    - QPSK (Quadrature PSK)
+    - QAM (Quadrature Amplitude Modulation)
+    - Offset-QPSK
