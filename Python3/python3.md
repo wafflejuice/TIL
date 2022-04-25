@@ -129,3 +129,12 @@ for i,j in zip(list1,list2):
 ## set remove vs. discard
 my_set.remove(key) raises an error when there is no such key.  
 my_set.discard(key) doesn't raise an error.
+
+# 2022-04-25
+## dictionary
+dictionary는 insertion order를 보장한다. (from Python3.7)
+
+*Performing list(d) on a dictionary returns a list of all the keys used in the dictionary, in **insertion order** (if you want it sorted, just use sorted(d) instead).* 
+[>>see python document](https://docs.python.org/3.8/tutorial/datastructures.html?highlight=dictionary#dictionaries)
+
+[>>also see stackoverflow](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)
