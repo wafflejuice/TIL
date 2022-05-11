@@ -137,3 +137,7 @@ CGLIB이 내가 등록할 객체 **R**을 상속하는 proxy 객체 **P**를 생
 @GetMapping, @PostMapping을 @RequestMapping의 shortcut으로 사용할 수 있다.  
 `@RequestMapping(value = "/...", method = RequestMethod.GET)` can be replaced by `@GetMapping("/...")`  
 `@RequestMapping(value = "/...", method = RequestMethod.POST)` can be replaced by `@PostMapping("/...")`  
+
+# 2022-05-11
+## @Transactional
+@Transactional annotation은 @Test와 함께 사용될 경우 Test가 끝나면 DB를 rollback한다. 직접 DB를 확인해보고 싶다면 @Rollback(false) annotation을 사용한다.
