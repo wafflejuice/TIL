@@ -141,3 +141,32 @@ CGLIB이 내가 등록할 객체 **R**을 상속하는 proxy 객체 **P**를 생
 # 2022-05-11
 ## @Transactional
 @Transactional annotation은 @Test와 함께 사용될 경우 Test가 끝나면 DB를 rollback한다. 직접 DB를 확인해보고 싶다면 @Rollback(false) annotation을 사용한다.
+
+# 2022-05-12
+## Spring Data JPA
+1:N relation
+```java
+// N-side
+@ManyToOne
+@JoinColumn(name = "column_name")
+
+// 1-side
+@OneToMany(mappedBy = "entity_member_name")
+```
+
+1:1 relation에서는 조회가 더 빈번한 쪽을 FK로 삼는다.
+```java
+// frequent
+@OneToOne
+@JoinColumn(name = "column_name")
+
+// rare
+@OneToOne(mappedBy = "entity_member_name")
+```
+
+## Spring Data JPA, EnumType
+Enum annotation으로 EnumType.ORDINAL(default)과 EnumType.STRING이 존재한다. ORDINAL은 중간에 다른 enum type이 추가되면 그 뒤 enum type의 값들이 한 칸씩 밀리기 때문에 쓰면 안 된다.
+```java
+@Enumerated(EnumType.STRING)
+private DeliveryStatus status; // READY, COMP
+```
