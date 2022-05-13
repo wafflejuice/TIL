@@ -147,7 +147,7 @@ CGLIB이 내가 등록할 객체 **R**을 상속하는 proxy 객체 **P**를 생
 1:N relation
 ```java
 // N-side
-@ManyToOne
+@ManyToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "column_name")
 
 // 1-side
@@ -157,12 +157,14 @@ CGLIB이 내가 등록할 객체 **R**을 상속하는 proxy 객체 **P**를 생
 1:1 relation에서는 조회가 더 빈번한 쪽을 FK로 삼는다.
 ```java
 // frequent
-@OneToOne
+@OneToOne(fetch = FetchType.LAZY)
 @JoinColumn(name = "column_name")
 
 // rare
-@OneToOne(mappedBy = "entity_member_name")
+@OneToOne(mappedBy = "entity_member_name", fetch = FetchType.LAZY)
 ```
+
+기본적으로 OneToMany는 fetch=FetchType.LAZY이지만 ~ToOne은 fetch=FetchType.EAGER이다. EAGER option은 JQPL을 날릴 때 연관된 모든 entity를 끌고오므로 성능 문제가 발생한다(N+1 문제). 따라서 항상 fetch=FetchType.LAZY로 바꿔주는 게 좋다.
 
 ## Spring Data JPA, EnumType
 Enum annotation으로 EnumType.ORDINAL(default)과 EnumType.STRING이 존재한다. ORDINAL은 중간에 다른 enum type이 추가되면 그 뒤 enum type의 값들이 한 칸씩 밀리기 때문에 쓰면 안 된다.
