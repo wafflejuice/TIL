@@ -138,3 +138,12 @@ dictionary는 insertion order를 보장한다. (from Python3.7)
 [>>see python document](https://docs.python.org/3.8/tutorial/datastructures.html?highlight=dictionary#dictionaries)
 
 [>>also see stackoverflow](https://stackoverflow.com/questions/39980323/are-dictionaries-ordered-in-python-3-6)
+
+# 2022-05-21
+## unpacking (*)
+unpacking operator(*)로 iterable을 만들어줄 수 있다.
+```python
+    packed = [(0, 1), (2, 3), (4, 5)]
+    unpacked = list(zip(*packed))
+    print(unpacked) # [(0, 2, 4), (1, 3, 5)]
+```
