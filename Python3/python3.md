@@ -147,3 +147,12 @@ unpacking operator(*)로 iterable을 만들어줄 수 있다.
     unpacked = list(zip(*packed))
     print(unpacked) # [(0, 2, 4), (1, 3, 5)]
 ```
+
+# 2022-06-05
+## recursion depth
+Python3의 default 최대 재귀 깊이는 1000이다. 때문에 코딩테스트에서 재귀함수를 이용해 문제를 풀 때 RecursionError가 발생하면 recursion limit을 조절해 해결 가능한 경우가 존재한다.
+
+```python
+print(sys.getrecursionlimit()) # 1000
+sys.setrecursionlimit(10**8)
+```
