@@ -172,3 +172,8 @@ Enum annotation으로 EnumType.ORDINAL(default)과 EnumType.STRING이 존재한�
 @Enumerated(EnumType.STRING)
 private DeliveryStatus status; // READY, COMP
 ```
+
+# 2022-06-24
+## entity manager factory vs. entity manager
+entity manager factory : thread-safe  
+entity manager : thread-UNSAFE
