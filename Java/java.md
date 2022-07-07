@@ -11,3 +11,11 @@ TreeMap 값 수정 시 주의해야할 점 : TreeMap 내부 함수를 이용해 
 
 *All Map.Entry pairs returned by methods in this class and its views represent snapshots of mappings at the time they were produced. They do not support the Entry.setValue method. (Note however that it is possible to change mappings in the associated map using put.)*  
 [Java11 TreeMap Doc 링크](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/TreeMap.html)
+
+# 2022-07-07
+## null-safe
+null은 값이 아니다. T를 반환하는 method는 null을 반환하기보다는 empty T를 반환하는 것이 좋다.
+
+## final vs. immutable
+- final : Object의 reference를 바꾸지 못 한다.  
+- immutable : Object의 value를 바꾸지 못 한다.  
