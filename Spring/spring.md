@@ -177,3 +177,15 @@ private DeliveryStatus status; // READY, COMP
 ## entity manager factory vs. entity manager
 entity manager factory : thread-safe  
 entity manager : thread-UNSAFE
+
+# 2022-07-08
+## entity lifecycle
+- New
+- Managed
+- Detached
+- Removed
+- (DB)
+
+![jpa-entity-lifecycle](./jpa-entity-lifecycle.png)
+
+**detached entity를 merge하더라도 해당 entity가 managed 상태로 가는 것은 아니다. merge의 결과로 새로운 entity를 반환한다.

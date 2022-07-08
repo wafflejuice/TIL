@@ -77,10 +77,10 @@ Decibel
 L = 10 log<sub>10</sub>(B/A)
 
 QPSK modulation  
-![QPSK-modulation.PNG)](./QPSK-modulation.PNG)
+![QPSK-modulation.PNG](./QPSK-modulation.PNG)
 
 QPSK demodulation  
-![QPSK-demodulation.PNG)](./QPSK-demodulation.PNG)
+![QPSK-demodulation.PNG](./QPSK-demodulation.PNG)
 
 
 Analog Data &rarr; Digital Data
