@@ -35,3 +35,21 @@ n번 호출해도 결과가 같다.
 - HEAD
 - POST (△)
 - PATCH (△)
+
+# 2022-07-11
+## collection vs. store
+컬렉션 (collection)  
+- POST 기반 등록
+- 서버가 리소스 URI 결정
+
+스토어 (store)  
+- PUT 기반 등록
+- 클라이언트가 리소스 URI 결정
+
+주로 컬렉션을 사용한다.
+
+## control URI
+control URI : HTTP 메서드로 해결이 어려울 경우 사용한다. (동사 사용)  
+ex) HTML form은 GET, POST만 지원한다.  
+ex) /members/{id}/**new**  
+
