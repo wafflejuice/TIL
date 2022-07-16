@@ -9,3 +9,10 @@ val view: View = Button()
 view.showOff() // It is a view.
 ```
 내부적으로 확장 함수는 수신 객체를 첫 번째 인자로 받는 **정적** 메서드이기 때문이다.
+
+# 2022-07-16
+## equality & reference comparison
+|   |Java|Kotlin|
+|---|------|---|
+|equality|equals|==|
+|reference|==|===|
