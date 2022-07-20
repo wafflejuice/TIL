@@ -16,3 +16,7 @@ view.showOff() // It is a view.
 |---|------|---|
 |equality|equals|==|
 |reference|==|===|
+
+# 2022-07-20
+## supertype vs. covariant
+![supertype_covariant.png](./supertype_covariant.PNG)
