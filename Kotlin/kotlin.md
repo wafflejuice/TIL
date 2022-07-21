@@ -20,3 +20,11 @@ view.showOff() // It is a view.
 # 2022-07-20
 ## supertype vs. covariant
 ![supertype_covariant.png](./supertype_covariant.png)
+
+# 2022-07-21
+## Array\<Int\> vs. IntArray
+Boxed type vs. primitive type
+|Kotlin|Java|
+|---|------|
+|Array\<Int\>|Integer[]|
+|IntArray|int[]|
