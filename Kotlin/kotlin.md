@@ -28,3 +28,8 @@ Boxed type vs. primitive type
 |---|------|
 |Array\<Int\>|Integer[]|
 |IntArray|int[]|
+
+## null safe examples
+println(null == "a") // false
+println(null === "a") // false
+println(null is String) // false
