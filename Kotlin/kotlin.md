@@ -45,3 +45,35 @@ println(null is String) // false
 |internal|same module|same module|
 |protected|sub-class|N/A|
 |private|same class|same file|
+
+## loop [break/continue]
+Can state a loop to [break/continue].
+```Kotlin
+for (i in 1..3) {
+    println("i=$i")
+    jloop@for (j in 1..3) { // break this loop
+        println("\tj=$j")
+        for (k in 1..3) {
+            println("\t\tk=$k")
+            if (k == 2) {
+                break@jloop;
+            }
+        }
+    }
+}
+```
+result
+```Kotlin
+i=1
+	j=1
+		k=1
+		k=2
+i=2
+	j=1
+		k=1
+		k=2
+i=3
+	j=1
+		k=1
+		k=2
+```
