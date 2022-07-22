@@ -29,7 +29,19 @@ Boxed type vs. primitive type
 |Array\<Int\>|Integer[]|
 |IntArray|int[]|
 
+# 2022-07-22
 ## null safe examples
+```Kotlin
 println(null == "a") // false
 println(null === "a") // false
 println(null is String) // false
+```
+
+# 2022-07-23
+## visibility
+|visibility|class member|top level declaration|
+|---|---|---|
+|public (default)|everywhere|everywhere|
+|internal|same module|same module|
+|protected|sub-class|N/A|
+|private|same class|same file|
