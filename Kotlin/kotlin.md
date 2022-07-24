@@ -77,3 +77,29 @@ i=3
 		k=1
 		k=2
 ```
+
+# 2022-07-24
+## try-catch-finally
+The value of `finally` can't be the value of the try expression.
+
+>The value of the try-expression is the same as the value of the last expression of the try body (if no exception was thrown) or the value of the last expression of the matching catch block (if an exception was thrown and matched). [kotlin doc](https://kotlinlang.org/spec/expressions.html#try-expressions)
+
+```Kotlin
+fun getNumber(str: String): Int {
+    return try {
+        Integer.parseInt(str)
+    } catch (e: NumberFormatException) {
+        0
+    } finally {
+        println("finally")
+        -1 // no value will be returned from finally block
+    }
+}
+
+println(getNumber("5"))
+```
+result
+```Kotlin
+finally
+5
+```
