@@ -189,3 +189,10 @@ entity manager : thread-UNSAFE
 ![jpa-entity-lifecycle](./jpa-entity-lifecycle.png)
 
 **detached entity를 merge하더라도 해당 entity가 managed 상태로 가는 것은 아니다. merge의 결과로 새로운 entity를 반환한다.
+
+# 2022-07-25
+## 식별 관계 vs. 비식별 관계 (Identifying Relationship vs. Non-Identifying Relationship)
+- 식별 관계 : 부모 테이블의 pk를 자식 테이블의 pk && fk로 사용
+- 비식별 관계 : 부모 테이블의 pk를 자식 테이블의 fk로만 사용
+    - 필수적Mandatory 비식별 관계 : fk에 NULL 비허용
+    - 선택적Optional 비식별 관계 : fk에 NULL 허용
