@@ -16,3 +16,9 @@
 
 # 2022-04-24
 `Ctrl`+`Shift`+`T` : generate test codes
+
+# 2022-07-26
+## test method명 한글 깨짐
+Help > Edit Custom VM Options ... 에서 `-Dfile.encoding=UTF-8` 추가
+
+[참고](https://itchipmunk.tistory.com/421)
