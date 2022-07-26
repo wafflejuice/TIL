@@ -103,3 +103,35 @@ result
 finally
 5
 ```
+
+# 2022-07-26
+## Type erasure of generics
+Obviously this code below works.
+```Kotlin
+val listAny = listOf("first", "second", "third")
+val strList = listAny as List<String>
+println(strList[1].replace("second", "two"))
+```
+result
+```Kotlin
+two
+```
+
+JVM doesn't know the data type of the generic at runtime.
+
+```Kotlin
+val listAny = listOf(1, 2, 3)
+
+// No error, because the data type of generic is erased.
+val strList = listAny as List<String>
+
+println(strList[1].replace("second", "two")) // error occurs
+```
+
+## reified parameter type inside a inline function
+Use `inline`, `reified` to check type within a function in runtime.
+```kotlin
+inline fun <reified T> function(arg: T) {
+    ...
+}
+```
