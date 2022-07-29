@@ -82,3 +82,61 @@ internal class PostsApiControllerTest(
 ) {
     ...
 }
+```
+
+## @Id type vs. type?
+```kotlin
+@Entity
+data class CompanyClass(
+    @Id
+    val companyCode: String,
+)
+```
+
+```kotlin
+@Entity
+data class CompanyClass(
+    @Id @GeneratedValue
+    val companyCode: String? = null,
+)
+```
+
+## createdDate, modifiedDate
+```kotlin
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
+class BaseTimeEntity(
+    @CreatedDate
+    @Column(updatable = false)
+    var createdDate: LocalDateTime = LocalDateTime.now(),
+
+    @LastModifiedDate
+    var modifiedDate: LocalDateTime = LocalDateTime.now()
+)
+
+@Entity
+class myEntity(
+    ...
+): BaseTimeEntity() {
+    ...
+}
+```
+
+단, build에서 all open 설정을 하지 않았다면 open 키워드를 붙여줘야 한다.
+
+```
+// build.gradle.kts
+
+allOpen {
+    annotation("javax.persistence.MappedSuperclass")
+}
+```
+
+or
+
+```kotlin
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener::class)
+open class BaseTimeEntity(
+    ...
+```
