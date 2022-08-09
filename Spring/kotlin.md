@@ -140,3 +140,40 @@ or
 open class BaseTimeEntity(
     ...
 ```
+
+# 2022-08-09
+## an annotation as a parameter in kotlin
+```kotlin
+@WebMvcTest(
+    HelloController::class,
+    excludeFilters = [
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [SecurityConfig::class])
+    ]
+)
+```
+
+`An annotation can't be used as the annotations argument` error occurs.
+
+correct:
+```kotlin
+@WebMvcTest(
+    HelloController::class,
+    excludeFilters = [
+        ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = [SecurityConfig::class])
+    ]
+)
+```
+
+> If an annotation is used as a parameter of another annotation, its name is not prefixed with the @ character:
+
+```kotlin
+annotation class ReplaceWith(val expression: String)
+
+annotation class Deprecated(
+        val message: String,
+        val replaceWith: ReplaceWith = ReplaceWith(""))
+
+@Deprecated("This function is deprecated, use === instead", ReplaceWith("this === other"))
+```
+
+[kotlin doc](https://kotlinlang.org/docs/annotations.html#constructors)
