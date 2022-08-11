@@ -135,3 +135,14 @@ inline fun <reified T> function(arg: T) {
     ...
 }
 ```
+
+# 2022-08-11
+## confusing keywords
+- iterator
+- iterable
+- kotlin collections
+- kotlin sequences
+- java collections
+- java stream
+- eager evaluation
+- lazy evaluation
