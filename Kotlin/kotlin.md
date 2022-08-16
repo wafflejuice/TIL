@@ -185,6 +185,7 @@ annotation class Slf4j{
 
 usage
 ```kotlin
+@Slf4j
 class MyClass(){
     fun writeLog() {
         logger.info("write log")
