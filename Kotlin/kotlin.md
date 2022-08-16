@@ -146,3 +146,61 @@ inline fun <reified T> function(arg: T) {
 - java stream
 - eager evaluation
 - lazy evaluation
+
+# 2022-08-16
+## logging in kotlin
+현재 프로젝트에서는 slf4j library와 logback 구현체를 사용해 log 관리를 하고있다.  
+어떤 클래스를 봐도 logger 선언부가 눈에 밟히는 것이 서서히 신경쓰이기 시작한다.
+
+개선해야할 대상)
+```kotlin
+private val logger = LoggerFactory.getLogger(this::class.java)
+```
+
+logging하는 모든 class마다 logger를 얻어야할까? 상속이나 annotation으로 해결할 수 없을까?
+- Lombok - @Slf4j annotation 사용 가능. 그러나 kotlin + Lombok은 해당 annotation을 지원하지 않는다.
+- logger를 가지는 클래스를 상속. 그러나 이 방법은 부가적인 기능(log)을 클래스와 결합시키는 단점이 존재한다. (AOP 위반)
+- inline function - 상위에 inline function을 정의한다.
+```kotlin
+inline fun <reified T> logger(from: T) : Logger = LoggerFactory.getLogger(T::class.java)
+```
+다음과 같이 선언한다.
+```kotlin
+private val logger = logger(this)
+```
+나쁘지는 않지만 여전히 선언을 필요로 한다는 점이 번거롭다. 하지만 충분히 짧아서 용인할 수 있는 정도로 보이기도 한다. 적어도 글자수는 절반으로 줄어들었다. (62자->33자)
+- custom annotation - 직접 구현 필요할 것. Reflection을 사용하기 때문에 성능 저하가 발생할 수 있다. 하지만 이렇게 작은 기능만 수행하는 annotation이 가시적인 성능 저하를 가져올까...? ~~더군다나 code generation이라면...~~ type을 알아야 하는 이상 run-time일 수밖에 없다.  
+custom annotation 작성 시행착오 도중 해답을 발견한 것 같다.
+```kotlin
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Slf4j{
+    companion object{
+        val <reified T> T.logger: Logger
+            inline get() = LoggerFactory.getLogger(T::class.java)
+    }
+}
+```
+[출처](https://developpaper.com/detailed-explanation-of-log-usage-in-kotlin/)
+
+usage
+```kotlin
+class MyClass(){
+    fun writeLog() {
+        logger.info("write log")
+    }
+}
+```
+이런 방식이면 기존 코드에서  
+1) logger 선언부를 삭제하고  
+2) @Slf4j annotation을 붙이고  
+3) (물론 작성한 Slf4j class를 import하는)  
+것만 수정하면 될 것 같다.
+
+keywords
+- log4j - logging library. thread safe
+- log4j2 - 명백하게 log4j의 다음 버전이다.
+- slf4j - logging library의 wrapper library이다.
+- logback - logging library.
+
+log4j is thread-safe : LoggerFactory는 thread-safe하지만 LoggerFactory.getLogger()로 얻은 logger는 not thread-safe할 것이라고 추정됨. (알아봐야 함)
