@@ -177,3 +177,27 @@ annotation class Deprecated(
 ```
 
 [kotlin doc](https://kotlinlang.org/docs/annotations.html#constructors)
+
+# 2022-08-12
+SpringBoot에 포함된 ObjectMapper를 사용하면 kotlin에서는 error 발생.
+> com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Cannot construct instance of `hello.survlet.basic.HelloData` (no Creators, like default constructor, exist): cannot deserialize from Object value (no delegate- or property-based Creator)
+
+kotlin module인 `jacksonObjectMapper` 사용.
+```kotlin
+// val objectMapper: ObjectMapper = ObjectMapper() // error
+val objectMapper: ObjectMapper = jacksonObjectMapper()
+val helloData = objectMapper.readValue(messageBody, HelloData::class.java)
+```
+
+# 2022-08-20
+## @Component DI
+kotlin에서 `@Component` annotation이 붙은 class의 primary constructor는 자동으로 DI된다.
+
+## TransactionTemplate.execute { ... }
+`TransactionTemplate.execute { ... }`로 `@Transactional`보다 유연한 transaction 처리 가능
+
+## @Value
+properties에서 정의한 값 사용 가능.
+```kotlin
+@Value("${hello.spring}") hello
+```
