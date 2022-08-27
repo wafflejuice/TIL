@@ -53,3 +53,13 @@ random value를 사용할 때는 seed를 고정하는 것이 좋다고 생각함
 - Cross-check : 다른 수단을 활용하여 교차 검사할 수 있는가?
 - Error conditions : 오류 조건을 강제로 일어나게 할 수 있는가?
 - Performance characteristics : 성능 조건은 기준에 부합하는가?
+
+# 2022-08-27
+## CORRECT
+- Conformance(준수)
+- Ordering(순서)
+- Range(범위)
+- Reference(참조)
+- Existence(존재)
+- Cardinality(기수)
+- Time(시간)
