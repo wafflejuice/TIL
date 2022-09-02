@@ -196,3 +196,24 @@ entity manager : thread-UNSAFE
 - 비식별 관계 : 부모 테이블의 pk를 자식 테이블의 fk로만 사용
     - 필수적Mandatory 비식별 관계 : fk에 NULL 비허용
     - 선택적Optional 비식별 관계 : fk에 NULL 허용
+
+# 2022-09-02
+## mockk
+```kotlin
+private val customRepository: CustomRepository = mockk {
+    val slot = slot<Custom>()
+    every { save(capture(slot)) } answers { slot.captured }
+}
+```
+
+## MockRestServiceServer
+`RestTemplate`의 `ClientHttpRequestFactory`에 `MockClientHttpRequestFactory`가 주입된다.
+
+```kotlin
+@Autowired
+private lateinit var mockServer: MockRestServiceServer
+
+mockServer.expect(MockRestRequestMatchers.requestTo(customCiUrl))
+    .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+    .andRespond(MockRestResponseCreators.withSuccess().body(...))
+```
