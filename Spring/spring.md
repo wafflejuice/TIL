@@ -217,3 +217,52 @@ mockServer.expect(MockRestRequestMatchers.requestTo(customCiUrl))
     .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
     .andRespond(MockRestResponseCreators.withSuccess().body(...))
 ```
+
+# 2022-09-03
+## RequestMappingHandlerMapping
+`RequestMappingHandlerMapping`은 스프링 빈 중에서 `@RequestMapping` 또는 `@Controller`가
+**클래스 레벨**에 붙어 있는 경우에 매핑 정보로 인식한다.
+
+```kotlin
+@Controller
+class SpringMemberFormControllerV1 {
+
+    @RequestMapping("/springmvc/v1/members/new-form")
+    fun process(): ModelAndView {
+        return ModelAndView("new-form")
+    }
+}
+```
+```kotlin
+@Component
+@RequestMapping
+class SpringMemberFormControllerV1 {
+
+    @RequestMapping("/springmvc/v1/members/new-form")
+    fun process(): ModelAndView {
+        return ModelAndView("new-form")
+    }
+}
+```
+
+`org/springframework/web/servlet/mvc/method/annotation/RequestMappingHandlerMapping.java`
+```java
+	/**
+	 * {@inheritDoc}
+	 * <p>Expects a handler to have either a type-level @{@link Controller}
+	 * annotation or a type-level @{@link RequestMapping} annotation.
+	 */
+	@Override
+	protected boolean isHandler(Class<?> beanType) {
+		return (AnnotatedElementUtils.hasAnnotation(beanType, Controller.class) ||
+				AnnotatedElementUtils.hasAnnotation(beanType, RequestMapping.class));
+	}
+```
+
+또는 Bean으로 직접 등록
+```kotlin
+@Bean
+fun springMemberFormControllerV1(): SpringMemberFormControllerV1 {
+    return SpringMemberFormControllerV1()
+}
+```
