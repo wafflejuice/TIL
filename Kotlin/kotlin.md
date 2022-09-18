@@ -205,3 +205,78 @@ keywords
 - logback - logging library.
 
 log4j is thread-safe : LoggerFactory는 thread-safe하지만 LoggerFactory.getLogger()로 얻은 logger는 not thread-safe할 것이라고 추정됨. (알아봐야 함)
+
+# 2022-09-18
+## Jackson library with Kotlin data class
+If you normally tries to serialize an data class, *cannot deserialize from Object value (no delegate- or property-based Creator)* error would occur.
+```kotlin
+import com.fasterxml.jackson.databind.ObjectMapper
+...
+val mapper = ObjectMapper()
+val helloData = mapper.readValue(messageBody, HelloData::class.java)
+...
+data class HelloData(
+    val username: String,
+    val age: Int
+)
+```
+
+In Java, jackson library doesn't know how to create **the model which doesn't have an empty constructor** and **the model contains constructor with parameters which didn't annotated its parameters with `@JsonProperty("field_name")`**. *source: [stack overflow](https://stackoverflow.com/questions/53191468/no-creators-like-default-construct-exist-cannot-deserialize-from-object-valu)*
+
+> On the JVM, if the generated class needs to have a parameterless constructor, default values for the properties have to be specified (see [Constructors](https://kotlinlang.org/docs/classes.html#constructors)). *source : [kotlin doc](https://kotlinlang.org/docs/data-classes.html)*
+
+### Solutions:
+#### 1. Add an empty constructor.
+```kotlin
+data class HelloData(
+    val username: String,
+    val age: Int
+) {
+    constructor() : this("", 0)
+}
+```
+
+#### 2. Add default values to the primary constructor.
+```kotlin
+data class HelloData(
+    val username: String = "",
+    val age: Int = 0
+)
+```
+
+#### 3. Annotate constructor parameters with `@JsonProperty("field_name")`
+```kotlin
+data class HelloData(
+    @JsonProperty("username") val username: String,
+    @JsonProperty("age") val age: Int
+)
+```
+
+#### 4. fasterxml (*source: [FasterXML doc](https://github.com/FasterXML/jackson-module-kotlin)*)
+Add a dependency.
+```gradle
+dependencies {
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.+")
+}
+```
+Use `jacksonObjectMapper()` to create an object mapper.
+```kotlin
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+...
+val mapper = jacksonObjectMapper()
+
+// or
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+...
+val mapper = ObjectMapper().registerKotlinModule()
+
+// or
+import com.fasterxml.jackson.module.kotlin.jsonMapper
+import com.fasterxml.jackson.module.kotlin.kotlinModule
+...
+val mapper = jsonMapper {
+  addModule(kotlinModule())
+}
+```
+
+further read: [Baeldung](https://www.baeldung.com/kotlin/instantiate-data-class-empty-constructor)
