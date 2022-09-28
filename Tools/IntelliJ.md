@@ -22,3 +22,7 @@
 Help > Edit Custom VM Options ... 에서 `-Dfile.encoding=UTF-8` 추가
 
 [참고](https://itchipmunk.tistory.com/421)
+
+# 2022-09-29
+## 자동완성
+`Ctrl`+`Space` / `Command`+`Space`
