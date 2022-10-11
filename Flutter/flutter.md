@@ -18,3 +18,20 @@ You can find it inside here:
 2. run `rename` package.
 
 `dart pub global run rename --bundleId {App-ID}`
+
+# 2022-10-11
+## Function.apply(function, [param1, param2, ...]) vs. function.call(param1, param2, ...)
+```dart
+Function(String name, int vintage) printWineDetails = ((String name, int vintage){
+    print('Name: $name, Vintage: $vintage');
+});
+
+
+void main() {
+    // Function.apply(function, [param1, param2, ...])
+    Function.apply(printWineDetails, ['Cabernet Sauvignon', 2018]);
+    
+    // function.call(param1, param2, ...)
+    printWineDetails.call('Cabernet Sauvignon', 2018);
+}
+```
