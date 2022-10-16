@@ -201,3 +201,25 @@ properties에서 정의한 값 사용 가능.
 ```kotlin
 @Value("${hello.spring}") hello
 ```
+
+# 2022-10-16
+## Bean Validation API
+in java
+```java
+public class User {
+    @Min(value = 19, message = "not adult")
+    private final Int age;
+
+    public User(Int age) {
+        this.age = age;
+    }
+}
+```
+in kotlin
+```kotlin
+class User(
+    @field:Min(value = 19, message = "not adult")
+    private val age: Int
+)
+```
+Change kotlin code into kotlin bytecode, then decompile it to find the reason.
