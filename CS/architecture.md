@@ -41,3 +41,10 @@ Pros
 
 Cons
 - 가시성이 훨씬 떨어진다
+
+# 2022-10-17
+## input and output should be specific among usecases
+<만들면서 배우는 클린 아키텍처>(Tom Hombergs) pp.49-50
+
+입력과 비슷하게 출력도 각 usecase마다 **구체적**일수록 좋다. 같은 출력 모델을 공유하면 usecase들도 강하게 결합되기 때문이다.
+같은 이유로, domain entity를 출력 모델로 사용해서도 안 된다.
