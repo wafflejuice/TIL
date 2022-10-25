@@ -280,3 +280,16 @@ val mapper = jsonMapper {
 ```
 
 further read: [Baeldung](https://www.baeldung.com/kotlin/instantiate-data-class-empty-constructor)
+
+# 2022-10-24
+## enum json mapper
+```kotlin
+enum class Gender(
+    @JsonValue
+    val code: String,
+    val message: String
+) {
+    Male("M", "남"),
+    Female("F", "여"),
+}
+```
