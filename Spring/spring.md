@@ -266,3 +266,11 @@ fun springMemberFormControllerV1(): SpringMemberFormControllerV1 {
     return SpringMemberFormControllerV1()
 }
 ```
+
+# 2022-10-26
+## paging with JPA
+```kotlin
+interface PostRepository: JpaRepository<Post, Long> {
+    fun findById(Id id, Pageable pageable): Page<Post>
+}
+```
