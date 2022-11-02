@@ -274,3 +274,18 @@ interface PostRepository: JpaRepository<Post, Long> {
     fun findById(Id id, Pageable pageable): Page<Post>
 }
 ```
+
+# 2022-11-02
+## @Modifying should be with @Query
+`@Modifying` annotation doesn't work without `@Query` annotation.
+
+> This annotation is only considered if used on query methods defined through a Query annotation.  
+[spring doc](https://docs.spring.io/spring-data/jpa/docs/current/api/org/springframework/data/jpa/repository/Modifying.html)
+
+# 2022-11-02
+## remove Entity with @Transactional annotation
+```
+org.springframework.dao.InvalidDataAccessApiUsageException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call; nested exception is javax.persistence.TransactionRequiredException: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call
+```
+
+delete의 경우 JPA상으로는 하나의 함수더라도, jdbc query는 하나가 아닐 가능성이 높다. 따라서 `@Transactional` annotation을 붙여줘야 한다.
