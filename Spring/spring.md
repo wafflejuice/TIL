@@ -289,3 +289,7 @@ org.springframework.dao.InvalidDataAccessApiUsageException: No EntityManager wit
 ```
 
 delete의 경우 JPA상으로는 하나의 함수더라도, jdbc query는 하나가 아닐 가능성이 높다. 따라서 `@Transactional` annotation을 붙여줘야 한다.
+
+# 2022-11-08
+## @ValueSource
+@ValueSource는 @ParameterizedTest와 함께 사용해야 한다.
