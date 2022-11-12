@@ -223,3 +223,8 @@ class User(
 )
 ```
 Change kotlin code into kotlin bytecode, then decompile it to find the reason.
+
+# 2022-11-02
+## Don't use a data class as an entity class
+> Here we don’t use data classes with val properties because JPA is not designed to work with immutable classes or the methods generated automatically by data classes.  
+[spring guides](https://github.com/spring-guides/tut-spring-boot-kotlin#persistence-with-jpa)
