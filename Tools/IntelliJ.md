@@ -26,3 +26,23 @@ Help > Edit Custom VM Options ... 에서 `-Dfile.encoding=UTF-8` 추가
 # 2022-09-29
 ## 자동완성
 `Ctrl`+`Space` / `Command`+`Space`
+
+# 2022-11-16
+## live template
+`File>Settings>Editor>Live Templates`
+
+test template example:
+
+```kotlin
+@Test
+fun $TEST$() {
+    // Arrange
+    val expected = $EXPECTED$
+    
+    // Act
+    val actual = $ACTUAL$
+    
+    // Assert
+    assertEquals(expected, actual)
+}
+```
