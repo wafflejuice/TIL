@@ -293,3 +293,15 @@ enum class Gender(
     Female("F", "여"),
 }
 ```
+
+# 2022-11-20
+## %, rem, mod
+`rem` (which is equivalent to `%` operator)
+> Calculates the remainder of truncating division of this value by the other value.
+The result is **either zero or has the same sign as the *dividend*** and has the absolute value less than the absolute value of the divisor.
+[source](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/rem.html)
+
+`mod`
+> Calculates the remainder of flooring division of this value by the other value.
+The result is **either zero or has the same sign as the *divisor*** and has the absolute value less than the absolute value of the divisor.
+[source](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/mod.html)
