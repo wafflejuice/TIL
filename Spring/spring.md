@@ -293,3 +293,22 @@ delete의 경우 JPA상으로는 하나의 함수더라도, jdbc query는 하나
 # 2022-11-08
 ## @ValueSource
 @ValueSource는 @ParameterizedTest와 함께 사용해야 한다.
+
+# 2022-11-21
+## Curly braces inside redirect-url
+Curly braces inside redirect-url is interpreted as URI variables.
+
+```kotlin
+@PostMapping("/{itemId}/edit")
+fun edit(
+    ...
+): String {
+    ...
+    return "redirect:/basic/items/{itemId}"
+}
+```
+
+> **setExpandUriTemplateVariables**  
+Whether to treat the redirect URL as a URI template. Set this flag to false if the redirect URL contains open and close curly braces "{", "}" and you don't want them interpreted as URI variables.
+Defaults to true.
+[spring doc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/view/RedirectView.html)

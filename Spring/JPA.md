@@ -21,3 +21,7 @@ ORDER BY createdAt DESC
 > DDL mode. This is actually a shortcut for the "hibernate.hbm2ddl.auto" property. Defaults to "create-drop" when using an embedded database and no schema manager was detected. Otherwise, defaults to "none".
 
 source: [spring doc](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#spring.jpa.hibernate.ddl-auto)
+
+# 2022-11-20
+## 
+`@CreatedDate`, `@LastModifiedDate` are not available for `ZonedDateTime`???
