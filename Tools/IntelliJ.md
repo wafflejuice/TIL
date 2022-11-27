@@ -46,3 +46,15 @@ fun $TEST$() {
     assertEquals(expected, actual)
 }
 ```
+
+# 2022-11-28
+## Project '{project-name}' not found in root project '{project-name}'.
+If following error occurs,
+
+```
+Project '{project-name}' not found in root project '{project-name}'.
+```
+
+delete the `.gradle` folder.
+
+[stackoverflow](https://stackoverflow.com/questions/16753798/android-project-myproject-not-found-in-root-project-myproject)
