@@ -21,7 +21,7 @@ null은 값이 아니다. T를 반환하는 method는 null을 반환하기보다
 - immutable : Object의 value를 바꾸지 못 한다.  
 
 # 2022-11-28
-## Locale.KOREA vs. Locale.KOREAN
+## Locale.KOREAN vs. Locale.KOREA
 Inside `Locale.java` file:
 
 - `Locale.KOREAN` and `Locale.KOREA`
@@ -84,4 +84,6 @@ private static BaseLocale createInstance(String language, String region) {
 }
 ```
 
-### Conclusion: `Locale.KOREAN` for language, `Locale.KOREA` for language & region.
+### Conclusion:
+- `Locale.KOREAN` for **language** ("ko")
+- `Locale.KOREA` for **language** & **region** ("ko", "KR")
