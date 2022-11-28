@@ -19,3 +19,69 @@ null은 값이 아니다. T를 반환하는 method는 null을 반환하기보다
 ## final vs. immutable
 - final : Object의 reference를 바꾸지 못 한다.  
 - immutable : Object의 value를 바꾸지 못 한다.  
+
+# 2022-11-28
+## Locale.KOREA vs. Locale.KOREAN
+Inside `Locale.java` file:
+
+- `Locale.KOREAN` and `Locale.KOREA`
+```java
+static {
+    ...
+    KOREAN = createConstant(BaseLocale.KOREAN);
+    ...
+    KOREA = createConstant(BaseLocale.KOREA);
+    ...
+}
+```
+
+- `createConstant` function
+```java
+private static Locale createConstant(byte baseType) {
+    BaseLocale base = BaseLocale.constantBaseLocales[baseType];
+    Locale locale = new Locale(base, null);
+    CONSTANT_LOCALES.put(base, locale);
+    return locale;
+}
+```
+
+Inside `BaseLocale.java` file:
+
+- `constantBaseLocales`
+```java
+public static @Stable BaseLocale[] constantBaseLocales;
+public static final byte ENGLISH = 0,
+        FRENCH = 1,
+        GERMAN = 2,
+        ...
+        KOREAN = 5,
+        ...
+        KOREA = 13,
+        ...
+        ROOT = 18,
+        NUM_CONSTANTS = 19;
+static {
+    CDS.initializeFromArchive(BaseLocale.class);
+    BaseLocale[] baseLocales = constantBaseLocales;
+    if (baseLocales == null) {
+        baseLocales = new BaseLocale[NUM_CONSTANTS];
+        baseLocales[ENGLISH] = createInstance("en", "");
+        baseLocales[FRENCH] = createInstance("fr", "");
+        baseLocales[GERMAN] = createInstance("de", "");
+        ...
+        baseLocales[KOREAN] = createInstance("ko", "");
+        ...
+        baseLocales[KOREA] = createInstance("ko", "KR");
+        ...
+    }
+}
+```
+
+- `createInstance` function
+```java
+private static BaseLocale createInstance(String language, String region) {
+    return new BaseLocale(language, "", region, "", false);
+}
+```
+
+### Conclusion: `Locale.KOREAN` for language, `Locale.KOREA` for language & region.
