@@ -312,3 +312,15 @@ fun edit(
 Whether to treat the redirect URL as a URI template. Set this flag to false if the redirect URL contains open and close curly braces "{", "}" and you don't want them interpreted as URI variables.
 Defaults to true.
 [spring doc](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/servlet/view/RedirectView.html)
+
+# 2022-11-29
+## properties file encoding error: non-english words are shown as ??
+While testing, if the error message below occurs:
+```
+expected: "{some value inside *.properties file}"
+ but was: "??"
+```
+
+Go inside `Settings > Editor > File Encodings`, change `Default encoding for properties files:` to `UTF-8`.
+
+Then non-english words inside `*.properties` file might be replaced by `??`. Restore them.
