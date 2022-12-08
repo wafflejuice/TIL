@@ -228,3 +228,39 @@ Change kotlin code into kotlin bytecode, then decompile it to find the reason.
 ## Don't use a data class as an entity class
 > Here we don’t use data classes with val properties because JPA is not designed to work with immutable classes or the methods generated automatically by data classes.  
 [spring guides](https://github.com/spring-guides/tut-spring-boot-kotlin#persistence-with-jpa)
+
+# 2022-12-08
+## Bean validation
+Use `@{validation}` for **class**, `@field:{validation}` for **data class**.
+```kotlin
+ class Item(
+    var id: Long? = null,
+
+    @NotBlank
+    var itemName: String? = null,
+
+    @Range(min = 1000, max = 1000000)
+    @NotNull
+    var price: Int? = null,
+
+    @Max(9999)
+    @NotNull
+    var quantity: Int? = null
+)
+```
+```kotlin
+data class Item(
+    var id: Long? = null,
+
+    @field:NotBlank
+    var itemName: String? = null,
+
+    @field:Range(min = 1000, max = 1000000)
+    @field:NotNull
+    var price: Int? = null,
+
+    @Max(9999)
+    @field:NotNull
+    var quantity: Int? = null
+)
+```
