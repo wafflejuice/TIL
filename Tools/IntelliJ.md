@@ -58,3 +58,10 @@ Project '{project-name}' not found in root project '{project-name}'.
 delete the `.gradle` folder.
 
 [stackoverflow](https://stackoverflow.com/questions/16753798/android-project-myproject-not-found-in-root-project-myproject)
+
+# 2022-12-10
+## Extract the method
+`Ctrl`+`Alt`+`M` : Extract the method
+
+## Parametarize the value
+`Ctrl`+`Alt`+`P` : Parametarize the value
