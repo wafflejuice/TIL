@@ -305,3 +305,24 @@ The result is **either zero or has the same sign as the *dividend*** and has the
 > Calculates the remainder of flooring division of this value by the other value.
 The result is **either zero or has the same sign as the *divisor*** and has the absolute value less than the absolute value of the divisor.
 [source](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/mod.html)
+
+# 2022-12-11
+## require & check & assert
+- require / requireNotNull
+```kotlin
+require(count >= 0) { "Count must be non-negative, was $count" }
+```
+Throws an `IllegalArgumentException` if the value is false, with the result of calling `lazyMessage` if it exists.
+
+- check / checkNotNull
+```kotlin
+val state = checkNotNull(someState) { "State must be set beforehand" }
+```
+Throws an `IllegalStateException` if the value is false, with the result of calling `lazyMessage` if it exists.  
+A `check` statement is usually located after a `require` statement.
+
+- assert
+```kotlin
+assert(ret.size == num) { "Size is different."}
+```
+Throws an AssertionError if the value is false and runtime assertions have been enabled. It does not work at production environment.
