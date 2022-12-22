@@ -35,3 +35,24 @@ void main() {
     printWineDetails.call('Cabernet Sauvignon', 2018);
 }
 ```
+
+# 2022-12-23
+## async & FutureBuilder
+async function은 항상 Future를 반환한다.  
+해당 async function이 종료되었을 때를 탐지하기 위해서는 FutureBuilder를 사용한다.
+
+```dart
+...
+child: FutureBuilder<SomeFuture>(
+    future: someAsyncFunction(),
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData == false) {
+            // placeholder
+        } else if (snapshot.hasError) {
+            // error handling
+        } else {
+            // main logic
+        }
+    }),
+...
+```
