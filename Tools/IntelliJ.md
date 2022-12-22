@@ -65,3 +65,8 @@ delete the `.gradle` folder.
 
 ## Parametarize the value
 `Ctrl`+`Alt`+`P` : Parametarize the value
+
+# 2022-12-23
+## jdk version 오류가 발생하면 확인해볼 것
+1. Run/Debug Configurations : Build and run
+2. Project structure > Project Settings > Project : SDK
