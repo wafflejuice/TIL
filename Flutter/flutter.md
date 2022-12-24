@@ -56,3 +56,40 @@ child: FutureBuilder<SomeFuture>(
     }),
 ...
 ```
+
+# 2022-12-24
+## MediaQuery inside initState
+Executing the below code will produce errors.
+```dart
+  @override
+  void initState() {
+    super.initState();
+
+    offsetX = MediaQuery.of(context).size.width * 0.5;
+    offsetY = MediaQuery.of(context).size.height * 0.5;
+    preX = offsetX;
+    preY = offsetY;
+  }
+```
+
+errors:
+```
+======== Exception caught by widgets library =======================================================
+The following assertion was thrown building KeyedSubtree-[GlobalKey#45265]:
+dependOnInheritedWidgetOfExactType<MediaQuery>() or dependOnInheritedElement() was called before DraggableObjectPageState.initState() completed.
+```
+
+Using `Future.delayed` function would solve the problem.
+```dart
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () {
+      offsetX = MediaQuery.of(context).size.width * 0.5;
+      offsetY = MediaQuery.of(context).size.height * 0.5;
+      preX = offsetX;
+      preY = offsetY;
+    });
+  }
+```
