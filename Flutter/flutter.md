@@ -93,3 +93,7 @@ Using `Future.delayed` function would solve the problem.
     });
   }
 ```
+
+# 2022-12-26
+## sqflite: onCreate will be executed only when there is no database file
+sqflite: `onCreate` will be executed **only when there is no database file**. Not when there is no table in the db.
