@@ -97,3 +97,26 @@ Using `Future.delayed` function would solve the problem.
 # 2022-12-26
 ## sqflite: onCreate will be executed only when there is no database file
 sqflite: `onCreate` will be executed **only when there is no database file**. Not when there is no table in the db.
+
+# 2022-12-27
+## serialize a list of objects in the JSON format
+```dart
+class MyClass {
+  List<MyObject> myObjects;
+  ...
+  Map<String, dynamic> toJson() {
+    return {
+      'myObjects': jsonEncode(myObjects),
+    };
+  }
+
+  factory MyClass.fromJson(Map<String, dynamic> map) {
+    return MyClass(
+      myObjects: List.from(
+          jsonDecode(map['myObjects']).map((model) => MyObject.fromJson(model))),
+    );
+  }
+}
+```
+
+notes: `MyObject` also should implement `toJson()`, `fromJson`.
