@@ -120,3 +120,74 @@ class MyClass {
 ```
 
 notes: `MyObject` also should implement `toJson()`, `fromJson`.
+
+# 2023-01-13
+## late initialization specific error case
+Not initialized error occurred:
+```dart
+final ReportProvider _reportProvider = ReportProvider();
+late Future<List<Report>> _reports;
+
+@override
+void initState() {
+  super.initState();
+
+  loadReports(_selectedStatRange);
+}
+
+Future<void> loadReports(StatRange statRange) async {
+  tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+
+  switch (statRange) {
+    case StatRange.WEEKLY:
+      tz.TZDateTime weekBegin = calculateWeekBegin(now);
+      tz.TZDateTime weekEnd = calculateWeekEnd(now);
+
+      _reports = _reportProvider.getReportsBetween(weekBegin, weekEnd);
+      break;
+    case StatRange.MONTHLY:
+      tz.TZDateTime monthBegin = calculateMonthBegin(now);
+      tz.TZDateTime monthEnd = calculateMonthEnd(now);
+
+      _reports = _reportProvider.getReportsBetween(monthBegin, monthEnd);
+      break;
+    case StatRange.ALL_TIME:
+      _reports = _reportProvider.getReports();
+      break;
+  }
+}
+```
+
+No error occurred :
+```dart
+final ReportProvider _reportProvider = ReportProvider();
+late Future<List<Report>> _reports;
+
+@override
+void initState() {
+  super.initState();
+
+  _reports = loadReports(_selectedStatRange);
+}
+
+Future<List<Report>> loadReports(StatRange statRange) async {
+  tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+
+  switch (statRange) {
+    case StatRange.WEEKLY:
+      tz.TZDateTime weekBegin = calculateWeekBegin(now);
+      tz.TZDateTime weekEnd = calculateWeekEnd(now);
+
+      return _reportProvider.getReportsBetween(weekBegin, weekEnd);
+    case StatRange.MONTHLY:
+      tz.TZDateTime monthBegin = calculateMonthBegin(now);
+      tz.TZDateTime monthEnd = calculateMonthEnd(now);
+
+      return _reportProvider.getReportsBetween(monthBegin, monthEnd);
+    case StatRange.ALL_TIME:
+      return _reportProvider.getReports();
+  }
+}
+```
+
+추측: async 내부에서 일어나는 assign은 late initialize이 일어나야 할 시점 이후에 일어난다?
