@@ -324,3 +324,85 @@ expected: "{some value inside *.properties file}"
 Go inside `Settings > Editor > File Encodings`, change `Default encoding for properties files:` to `UTF-8`.
 
 Then non-english words inside `*.properties` file might be replaced by `??`. Restore them.
+
+# 2023-02-05
+## dirty checking & merge
+준영속 엔티티 : 영속성 컨텍스트가 더는 관리하지 않는 엔티티
+ex. 식별자를 가지는 임의로 만든 엔티티
+
+준영속 엔티티를 수정하는 2가지 방법
+- dirty checking
+- merge
+
+1. dirty checking
+```java
+@Transactional
+void update(Item itemParam) { //itemParam: 파리미터로 넘어온 준영속 상태의 엔티티
+    Item findItem = em.find(Item.class, itemParam.getId());
+    findItem.setPrice(itemParam.getPrice());
+}
+```
+
+영속성 컨텍스트에서 엔티티를 다시 조회한 후에 데이터를 수정하는 방법.
+
+Transaction 안에서 엔티티를 다시 조회, 변경할 값 선택 -> 트랜잭션 커밋 시점에 dirty checking이 동작해서 DB UPDATE SQL 실행
+
+2. 병합 사용
+병합은 준영속 상태의 엔티티를 영속 상태로 변경할 때 사용하는 기능이다.
+
+```java
+@Transactional
+void update(Item itemParam) { //itemParam: 파리미터로 넘어온 준영속 상태의 엔티티
+    Item mergeItem = em.merge(item);
+}
+```
+
+merge 동작 방식
+
+![merge 동작 방식](../merge.png)
+
+1. merge() 를 실행한다.
+2. 파라미터로 넘어온 준영속 엔티티의 식별자 값으로 1차 캐시에서 엔티티를 조회한다.
+2-1. 만약 1차 캐시에 엔티티가 없으면 데이터베이스에서 엔티티를 조회하고, 1차 캐시에 저장한다.
+3. 조회한 영속 엔티티( mergeMember )에 member 엔티티의 값을 채워 넣는다. (member 엔티티의 모든 값
+을 mergeMember에 밀어 넣는다. 이때 mergeMember의 “회원1”이라는 이름이 “회원명변경”으로 바뀐다.)
+4. 영속 상태인 mergeMember를 반환한다.
+
+merge 동작 방식을 간단히 정리하면
+
+1. 준영속 엔티티의 식별자 값으로 영속 엔티티를 조회한다.
+2. 영속 엔티티의 값을 준영속 엔티티의 값으로 모두 교체한다.(병합한다.)
+3. 트랜잭션 커밋 시점에 변경 감지 기능이 동작해서 데이터베이스에 UPDATE SQL이 실행
+
+> 주의: 변경 감지 기능을 사용하면 원하는 속성만 선택해서 변경할 수 있지만, 병합을 사용하면 모든 속성이 변경된다. 병합시 값이 없으면 null 로 업데이트 할 위험도 있다.
+
+`SimpleJpaRepository.save(...)` source code
+```java
+/*
+    * (non-Javadoc)
+    * @see org.springframework.data.repository.CrudRepository#save(java.lang.Object)
+    */
+@Transactional
+@Override
+public <S extends T> S save(S entity) {
+
+    Assert.notNull(entity, "Entity must not be null.");
+
+    if (entityInformation.isNew(entity)) {
+        em.persist(entity);
+        return entity;
+    } else {
+        return em.merge(entity);
+    }
+}
+```
+
+엔티티의 식별자가 자동 생성(ex. `@Id @GeneratedValue`)되도록 선언하고 식별자 없이 `save` 메서드를 호출하면 `persist` 메서드가 호출되면서 식별자 값이 자동으로 할당된다.
+
+반면 식별자를 직접 할당하도록(ex. `@Id`) 선언했을 경우 식별자를 직접 할당하지 않고 `save` 메서드를 호출하면, 식별자가 없는 상태로 `persist` 메서드를 호출하게 되어 `IllegalArgumentException`이 발생한다.
+
+`isNew`의 동작 방식
+
+id가 다음과 같으면 `true`, 그렇지 않으면 `false` 반환
+- id is reference type : null
+- id is primitive type : 0
