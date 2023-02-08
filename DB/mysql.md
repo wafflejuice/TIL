@@ -53,3 +53,23 @@ DELETE | i | f_id
 DEPENDENT prefix를 가지는 subquery는 외부 query에 의존적이므로 외부 query보다 먼저 실행될 수 없다 => 비효율적일 가능성이 높다.
 
 왜 EXISTS subquery는 index를 활용하지 않고, IN subquery는 활용하는지는 아직 원인을 찾고 있습니다.
+
+# 2023-02-08
+## CHAR vs. VARCHAR vs. TEXT
+CHAR
+- 크기 <= 255 bytes (= 2^8 - 1)
+- 고정 크기
+- 빠른 검색 속도
+
+VARCHAR
+- 크기 <= 65535 characters after MySQL 5.0.3 (= 2^16 - 1)
+- 크기 <= 65535 bytes before MySQL 5.0.3 (= 2^16 - 1)
+- 가변 크기
+- memory 저장 -> 빠른 검색 속도
+- index 가능
+
+TEXT
+- 크기 = 65535 (= 2^16 - 1)
+- 가변 크기
+- disk 저장 -> 느린 검색 속도
+- index 불가능
