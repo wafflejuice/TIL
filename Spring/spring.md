@@ -406,3 +406,10 @@ public <S extends T> S save(S entity) {
 id가 다음과 같으면 `true`, 그렇지 않으면 `false` 반환
 - id is reference type : null
 - id is primitive type : 0
+
+# 2023-03-16
+## SpringBoot 2.0 vs. 3.0: redis
+SpringBoot 2.0부터 `RedisConnectionFactory` Bean이 자동 생성됩니다.
+SpringBoot 3.0부터 `spring.data` prefix가 Spring Data Project를 위한 예약어가 되었습니다.
+
+SpringBoot 3.0 이전에 사용하던 `spring.redis.host`, `spring.redis.port`, `spring.redis.password`를 그대로 사용하면 `RedisConnectionFactory` Bean이 자동 생성되지 않기 때문에, 각각 `spring.data.redis.host`, `spring.data.redis.port`, `spring.data.redis.password`로 바꿔주어야 합니다.
