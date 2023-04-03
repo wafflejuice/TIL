@@ -98,3 +98,46 @@ catalog
 즉, catalog는 여러 개의 schema를 지닐 수 있으므로 schema보다 catalog가 상위 개념이다.
 
 reference : https://junhyunny.github.io/database/database-schema-and-catalog/
+
+# 2023-04-03
+## NL Join & Sort Merge Join & Hash Join
+- NL Join (Nested Loops Join)
+1. Find a row which matched the condition in the first table
+2. If 1 exists, find a row matched in the second table using the join key from 1
+3. If 2 exists, check whether the row match the condition
+4. Repeat 1 ~ 3
+
+- Sort Merge Join
+ 1. Sort  
+  1.1. Sort the first table and save it to PGA  
+  1-2. Sort the second table and save it to PGA  
+ 2. Merge: merge the two sorted sets
+
+- Hash Join
+ 1. Build: Generate the has map of the smaller table
+ 2. Probe: Join each row of the bigger table with the hash map
+
+참고. <친절한 SQL 튜닝> pp.255-298
+
+
+sort merge join보다 hash join이 빠른 이유를 책에서는 다음과 같이 설명하고 있다. (pp.286-287)
+- 알고리즘 차이에 의한 효과는 미미하다
+- 사전 작업의 차이에 의해 temp table space를 사용하는지 여부가 중요하다.
+- hash join은 작은 쪽의 table만큼을 저장하므로, temp table space를 사용하지 않고 PGA로도 충분한 경우가 많다.
+- sort merge join은 양쪽 table을 모두 저장하므로, PGA로 충분치 않아 temp table space를 사용할 가능성이 보다 높다.
+- temp table space를 사용하게 되면 disk write가 일어나므로 속도가 느려진다.
+
+**Q. 하나의 table만 sort 후 merge join하는 방법은 없을까?**
+
+사전지식
+- Hash Join은 join condition이 equal(=)이 아니면 사용할 수 없다.
+- Sort Merge Join은 join condition이 equal(=)이 아니더라도 사용할 수 있다.
+ 
+책에 소개되지 않았으므로 임의로 half sort merge join이라고 명명하면,
+- 사용하는 공간은 half sort merge join과 hash join이 동일하다. hash join도 결국 table 전체를 저장해야 하기 때문이다.
+- (책에서 '알고리즘 차이에 의한 효과는 미미하다'라는 주장을 믿는다면) disk write를 제외한 소요 시간은 half sort merge join과 hash join이 유사할 것이다.
+- 동일한 크기의 공간을 사용하면 temp table space에 저장되는 정보의 양도 동일하므로, 동일한 양의 disk write 작업이 일어난다.
+
+따라서 half sort merge join과 hash join의 사용 공간과 소요 시간은 유사하며, half sort merge join은 equal(=)이 아니더라도 사용할 수 있다는 장점을 가진다.
+
+해당하는 join 방식이 존재하는지 검색해보았으나 적절한 대답을 찾기 어렵다.
