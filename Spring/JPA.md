@@ -25,3 +25,12 @@ source: [spring doc](https://docs.spring.io/spring-boot/docs/current/reference/h
 # 2022-11-20
 ## 
 `@CreatedDate`, `@LastModifiedDate` are not available for `ZonedDateTime`???
+
+# 2023-04-13
+## annotations not needed for query methods
+1. `@Transactional`
+`SimpleJpaRepository`를 상속하는 Repository는 기본적으로 transactional하다.
+[Spring doc](https://docs.spring.io/spring-data/jpa/docs/3.0.3/reference/html/#transactions)
+
+2. `@Modifying`은 `@Query`와 함께 사용되어야지만 의미가 있으며, 쿼리 메서드에도 적용되지 않는다.
+[Spring doc](https://docs.spring.io/spring-data/data-jpa/docs/3.0.3/api/org/springframework/data/jpa/repository/Modifying.html)
