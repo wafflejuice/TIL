@@ -413,3 +413,18 @@ SpringBoot 2.0부터 `RedisConnectionFactory` Bean이 자동 생성됩니다.
 SpringBoot 3.0부터 `spring.data` prefix가 Spring Data Project를 위한 예약어가 되었습니다.
 
 SpringBoot 3.0 이전에 사용하던 `spring.redis.host`, `spring.redis.port`, `spring.redis.password`를 그대로 사용하면 `RedisConnectionFactory` Bean이 자동 생성되지 않기 때문에, 각각 `spring.data.redis.host`, `spring.data.redis.port`, `spring.data.redis.password`로 바꿔주어야 합니다.
+
+# 2023-06-27
+## @ExceptionHandler order
+이미 Exception handler가 존재하는 상황에서 `@RestControllerAdvice` 추가 정의
+
+```kotlin
+@RestControllerAdvice(assignableTypes = [OpenapiController::class])
+@Order(Ordered.HIGHEST_PRECEDENCE)
+```
+
+`@Order(Ordered.HIGHEST_PRECEDENCE)`가 존재하지 않으면 `assignableTypes`을 지정해주었음에도 gradle로 빌드할 때와 java로 빌드할 때의 결과가 달랐다.
+추론: HandlerExceptionResolver의 동작이 규약이 없어서 빌드 도구마다 다르게 실행됨.
+
+`HandlerExceptionResolver` interface의 구현체 `CompositeHandlerExceptionResolver`의 `resolveException` 함수에서 `getResolvers()`로 resolver 리스트를 취합한다. resolver 간의 순서는 `AnnotationAwareOrderComparator`에 따라 정해지는데, 해당 클래스에는 `compare` 함수가 존재하지 않고 부모 클래스 `OrderComparator`의 `compare` 함수를 사용한다. `compare` 함수 내부에서 `getOrder` 함수를 사용하여 resolver 리스트를 불러온다. 즉 `@Order`로 정의한(정의하지 않을 경우 `Ordered.LOWEST_PRECEDENCE` 취급) 순서대로 resolver를 불러오지만, Order가 동일할 경우에 대한 규약이 없기 때문에 빌드 도구에 따라 임의의 순서(ex. alphabetical order)로 resolver를 불러온다는 것이 나의 추론이다.
+따라서 `assignableTypes`는 일단 resolver가 선택된 이후의 이야기이므로 이 문제와 관계가 없는 것이다.
