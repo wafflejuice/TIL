@@ -141,3 +141,24 @@ sort merge join보다 hash join이 빠른 이유를 책에서는 다음과 같�
 따라서 half sort merge join과 hash join의 사용 공간과 소요 시간은 유사하며, half sort merge join은 equal(=)이 아니더라도 사용할 수 있다는 장점을 가진다.
 
 해당하는 join 방식이 존재하는지 검색해보았으나 적절한 대답을 찾기 어렵다.
+
+# 2023-08-21
+## JSON type
+JSON
+- 특정 필드 변경 시 in-place update 가능 <-> TEXT는 일부분만 변경하려 해도 통째로 업데이트해야 한다.
+- 특정 필드에 대해 index 생성 가능
+
+source: https://medium.com/daangn/json-vs-text-c2c1448b8b1f
+
+## unquoting extraction operator (->>)
+`->>` operator: available in MySQL 5.7.13 and later
+
+- `->` operator: simply extracts a value
+- `->>` operator: extracts a value & unquotes the extracted result
+
+ex) `c`의 `name` field를 추출하는 쿼리
+```sql
+SELECT c->>'$.name' AS name FROM jemp WHERE g > 2;
+```
+
+source: https://dev.mysql.com/doc/refman/5.7/en/json.html
