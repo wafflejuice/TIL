@@ -264,3 +264,33 @@ data class Item(
     var quantity: Int? = null
 )
 ```
+
+# 2023-09-24
+## Use lambda as a anonymous class with a only method
+example
+```kotlin
+override fun findById(memberId: String): Member {
+    val sql = "select * from member where member_id = ?"
+    return template.queryForObject(sql, memberRowMapper(), memberId)!!
+}
+
+private fun memberRowMapper(): RowMapper<Member> {
+    return RowMapper<Member> { rs: ResultSet, rowNum: Int ->
+        Member(
+            memberId = rs.getString("member_id"),
+            money = rs.getInt("money"),
+        )
+    }
+}
+```
+
+RowMapper interface
+```java
+@FunctionalInterface
+public interface RowMapper<T> {
+
+	@Nullable
+	T mapRow(ResultSet rs, int rowNum) throws SQLException;
+
+}
+```
