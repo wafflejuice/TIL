@@ -428,3 +428,131 @@ SpringBoot 3.0 이전에 사용하던 `spring.redis.host`, `spring.redis.port`, 
 
 `HandlerExceptionResolver` interface의 구현체 `CompositeHandlerExceptionResolver`의 `resolveException` 함수에서 `getResolvers()`로 resolver 리스트를 취합한다. resolver 간의 순서는 `AnnotationAwareOrderComparator`에 따라 정해지는데, 해당 클래스에는 `compare` 함수가 존재하지 않고 부모 클래스 `OrderComparator`의 `compare` 함수를 사용한다. `compare` 함수 내부에서 `getOrder` 함수를 사용하여 resolver 리스트를 불러온다. 즉 `@Order`로 정의한(정의하지 않을 경우 `Ordered.LOWEST_PRECEDENCE` 취급) 순서대로 resolver를 불러오지만, Order가 동일할 경우에 대한 규약이 없기 때문에 빌드 도구에 따라 임의의 순서(ex. alphabetical order)로 resolver를 불러온다는 것이 나의 추론이다.
 따라서 `assignableTypes`는 일단 resolver가 선택된 이후의 이야기이므로 이 문제와 관계가 없는 것이다.
+
+# 2023-09-25
+## @Transactional이 없으면 dirty-checking이 동작하지 않는다.
+테스트용 코드
+
+```kotlin
+package com.kakaopay.mortgage.api.controller.test
+
+import com.kakaopay.mortgage.domain.model.gateway.LoanGatewayRaw
+import com.kakaopay.mortgage.domain.model.gateway.LoanGatewayRawRepository
+import com.kakaopay.mortgage.domain.model.partner.FinanceCompanyCode
+import org.slf4j.LoggerFactory
+import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+@RequestMapping("/test/dirty-check")
+class DirtyCheckTestController(
+    private val yesTxYesSaveRunner: InnerConfig.YesTxYesSaveRunner,
+    private val yesTxNoSaveRunner: InnerConfig.YesTxNoSaveRunner,
+    private val noTxYesSaveRunner: InnerConfig.NoTxYesSaveRunner,
+    private val noTxNoSaveRunner: InnerConfig.NoTxNoSaveRunner,
+) {
+
+    @PostMapping
+    fun runTest() {
+        yesTxYesSaveRunner.run()
+        yesTxNoSaveRunner.run()
+        noTxYesSaveRunner.run()
+        noTxNoSaveRunner.run()
+    }
+
+    @Configuration
+    class InnerConfig {
+        private val logger = LoggerFactory.getLogger(this::class.java)
+
+        @Component
+        class YesTxYesSaveRunner(
+            private val loanGatewayRawRepository: LoanGatewayRawRepository,
+        ) {
+            @Transactional
+            fun run() {
+                val loanGatewayRaw = LoanGatewayRaw(
+                    loanFlowId = 1L,
+                    loanTransactionId = 10L,
+                    gateway = "SCRAPING",
+                    financeCompanyCode = FinanceCompanyCode.SC_BANK,
+                    messageType = "apply-by-scraping",
+                    requestPayload = "test-payload"
+                )
+                loanGatewayRawRepository.save(loanGatewayRaw)
+
+                loanGatewayRaw.complete(response = "test-response", statusCode = 500)
+                loanGatewayRawRepository.save(loanGatewayRaw)
+            }
+        }
+
+        @Component
+        class YesTxNoSaveRunner(
+            private val loanGatewayRawRepository: LoanGatewayRawRepository,
+        ) {
+            @Transactional
+            fun run() {
+                val loanGatewayRaw = LoanGatewayRaw(
+                    loanFlowId = 2L,
+                    loanTransactionId = 20L,
+                    gateway = "SCRAPING",
+                    financeCompanyCode = FinanceCompanyCode.SC_BANK,
+                    messageType = "apply-by-scraping",
+                    requestPayload = "test-payload"
+                )
+                loanGatewayRawRepository.save(loanGatewayRaw)
+
+                loanGatewayRaw.complete(response = "test-response", statusCode = 500)
+            }
+        }
+
+        @Component
+        class NoTxYesSaveRunner(
+            private val loanGatewayRawRepository: LoanGatewayRawRepository,
+        ) {
+            fun run() {
+                val loanGatewayRaw = LoanGatewayRaw(
+                    loanFlowId = 3L,
+                    loanTransactionId = 30L,
+                    gateway = "SCRAPING",
+                    financeCompanyCode = FinanceCompanyCode.SC_BANK,
+                    messageType = "apply-by-scraping",
+                    requestPayload = "test-payload"
+                )
+                loanGatewayRawRepository.save(loanGatewayRaw)
+
+                loanGatewayRaw.complete(response = "test-response", statusCode = 500)
+                loanGatewayRawRepository.save(loanGatewayRaw)
+            }
+        }
+
+        @Component
+        class NoTxNoSaveRunner(
+            private val loanGatewayRawRepository: LoanGatewayRawRepository,
+        ) {
+            fun run() {
+                val loanGatewayRaw = LoanGatewayRaw(
+                    loanFlowId = 4L,
+                    loanTransactionId = 40L,
+                    gateway = "SCRAPING",
+                    financeCompanyCode = FinanceCompanyCode.SC_BANK,
+                    messageType = "apply-by-scraping",
+                    requestPayload = "test-payload"
+                )
+                loanGatewayRawRepository.save(loanGatewayRaw)
+
+                loanGatewayRaw.complete(response = "test-response", statusCode = 500)
+            }
+        }
+    }
+}
+```
+
+result
+
+![save-without-transactional-result](Untitled.png)
+
+“@Transactional 없음 & save 안 함”의 경우에만 업데이트되지 않았다.
