@@ -104,3 +104,42 @@ class TestController(
 - GET {{mortgage-loan-url}}/test/serialization/json-mapper
 
 `{"int_variable":34,"long_variable":646345,"boolean_variable":"Y","string_variable":"abc"}`
+
+# 2023-10-23
+## Deserializer for primitive-boxed types
+다음 Custom Deserializer를 등록하였으나 Boolean 값으로 변환하지 못 하고 오류가 발생한다.
+
+```kotlin
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationContext
+import com.fasterxml.jackson.databind.JsonDeserializer
+
+class NiceBooleanDeserializer : JsonDeserializer<Boolean?>() {
+    override fun deserialize(parser: JsonParser, context: DeserializationContext?): Boolean? =
+        when (parser.text) {
+            "1" -> true
+            "0" -> false
+            else -> null
+        }
+}
+```
+
+```kotlin
+val simpleModule = SimpleModule()
+simpleModule.addDeserializer(Boolean::class.java, NiceBooleanDeserializer())
+```
+
+```
+Cannot deserialize value of type `java.lang.Boolean` from String "1": only "true" or "false" recognized
+com.fasterxml.jackson.databind.exc.InvalidFormatException: Cannot deserialize value of type `java.lang.Boolean` from String "1": only "true" or "false" recognized
+```
+
+Java Boolean의 경우, primitive와 Boxed type이 둘다 존재하기 때문에 다음과 같이 둘다 등록해주어야 한다.
+
+```kotlin
+val simpleModule = SimpleModule()
+simpleModule.addDeserializer(Boolean::class.java, NiceBooleanDeserializer())
+simpleModule.addDeserializer(Boolean::class.javaObjectType, NiceBooleanDeserializer())
+```
+
+reference: https://github.com/FasterXML/jackson-module-kotlin/issues/320#issuecomment-611783188
