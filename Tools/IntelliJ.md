@@ -70,3 +70,11 @@ delete the `.gradle` folder.
 ## jdk version 오류가 발생하면 확인해볼 것
 1. Run/Debug Configurations : Build and run
 2. Project structure > Project Settings > Project : SDK
+
+# 2023-12-20
+## 실행중인 코루틴 출력
+`-Dkotlinx.coroutines.debug` vm 옵션을 통해 실행중인 코루틴 출력 가능
+
+```kotlin
+println("${Thread.currentThread().name}")
+```
